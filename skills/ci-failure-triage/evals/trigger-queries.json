@@ -1,0 +1,27 @@
+{
+  "skill_name": "ci-failure-triage",
+  "should_trigger": [
+    "the pipeline on main is red, here's the job log, what actually broke?",
+    "GitLab job failed with exit code 1 and the log is 4000 lines long, find the real error",
+    "Buildkite build 4412 failed, can I just hit retry?",
+    "Jenkins says Finished: FAILURE but I can't tell which stage died",
+    "CircleCI step ended with 'Too long with no output', is that us or them?",
+    "the job got exit code 137 on the runner, what does that mean and what do I do about it",
+    "is this CI failure infra or did my commit break it? log attached",
+    "our deploy job keeps failing at docker pull with toomanyrequests",
+    "there are 60 errors in this build log, which one is the first real one",
+    "it builds fine on my machine but the CI job fails with Cannot find module, here is the console output"
+  ],
+  "should_not_trigger": [
+    "test_checkout_total fails about one run in ten on CI and passes when I re-run, fix the flaky test",
+    "write a .gitlab-ci.yml that builds and tests this Node project",
+    "our pipeline takes 40 minutes, how do we make it faster",
+    "migrate our Jenkins pipelines to GitHub Actions",
+    "add a cache for node_modules to the CircleCI config",
+    "the production API is returning 500s, help me read the application logs",
+    "set up a Buildkite agent on this EC2 instance",
+    "review this Jenkinsfile for best practices",
+    "add an automatic retry policy to every job in our pipeline config",
+    "my unit test fails locally with an AssertionError, help me debug it"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "ci-failure-triage",
+  "description": "Finds the first real failure in a red CI job log on GitLab CI, Buildkite, CircleCI or Jenkins, and separates infrastructure noise from code faults before anything is re-run or edited.",
+  "author": {
+    "name": "Muhammad Waseem Panhwar",
+    "url": "https://github.com/panhwerwaseem"
+  },
+  "homepage": "https://github.com/panhwerwaseem/ci-failure-triage",
+  "repository": "https://github.com/panhwerwaseem/ci-failure-triage",
+  "license": "MIT",
+  "keywords": ["ci", "ci-cd", "debugging", "gitlab-ci", "jenkins", "buildkite", "circleci", "agent-skills"]
+}

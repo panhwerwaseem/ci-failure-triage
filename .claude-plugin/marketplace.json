@@ -1,0 +1,15 @@
+{
+  "name": "panhwerwaseem-ci-failure-triage",
+  "owner": {
+    "name": "Muhammad Waseem Panhwar",
+    "url": "https://github.com/panhwerwaseem"
+  },
+  "description": "Single-skill marketplace for ci-failure-triage.",
+  "plugins": [
+    {
+      "name": "ci-failure-triage",
+      "source": "./",
+      "description": "Finds the first real failure in a red CI job log on GitLab CI, Buildkite, CircleCI or Jenkins, and separates infrastructure noise from code faults before anything is re-run or edited."
+    }
+  ]
+}

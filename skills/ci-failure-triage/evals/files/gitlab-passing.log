@@ -1,0 +1,54 @@
+[0KRunning with gitlab-runner 16.11.0 (91a27b2a)[0;m
+[0K  on docker-runner-3 x9Kq2LmPa, system ID: s_4f1c2d3e5a6b[0;m
+section_start:1714560000:prepare_executor[0K[0K[36;1mPreparing the "docker" executor[0;m[0;m
+[0KUsing Docker executor with image python:3.11-slim ...[0;m
+[0KPulling docker image python:3.11-slim ...[0;m
+[0KUsing docker image sha256:5f3a1c0e9b7d4a6c8e2f1b3d5a7c9e0f2b4d6a8c0e1f3b5d7a9c1e3f5b7d9a1c for python:3.11-slim with digest python@sha256:2e376990a11f1c1e03796d08db0e99c36eadb4bb6491372b227f1e53c3482914 ...[0;m
+section_end:1714560003:prepare_executor[0K
+section_start:1714560003:prepare_script[0K[0K[36;1mPreparing environment[0;m[0;m
+Running on runner-x9kq2lmpa-project-4821-concurrent-0 via ci-runner-03...
+section_end:1714560004:prepare_script[0K
+section_start:1714560004:get_sources[0K[0K[36;1mGetting source from Git repository[0;m[0;m
+[32;1mFetching changes with git depth set to 20...[0;m
+Initialized empty Git repository in /builds/acme/billing/.git/
+[32;1mCreated fresh repository.[0;m
+[32;1mChecking out 2b8f04d1 as detached HEAD (ref is main)...[0;m
+[32;1mSkipping Git submodules setup[0;m
+section_end:1714560006:get_sources[0K
+section_start:1714560006:step_script[0K[0K[36;1mExecuting "step_script" stage of the job script[0;m[0;m
+[0KUsing docker image sha256:5f3a1c0e9b7d4a6c8e2f1b3d5a7c9e0f2b4d6a8c0e1f3b5d7a9c1e3f5b7d9a1c for python:3.11-slim with digest python@sha256:2e376990a11f1c1e03796d08db0e99c36eadb4bb6491372b227f1e53c3482914 ...[0;m
+[32;1m$ pip install -r requirements-dev.txt[0;m
+[0;33mWARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='pypi.org', port=443): Read timed out. (read timeout=15)")': /simple/requests/[0;m
+Collecting requests==2.31.0 (from -r requirements-dev.txt (line 1))
+  Downloading requests-2.31.0-py3-none-any.whl.metadata (4.6 kB)
+Collecting pytest==8.2.0 (from -r requirements-dev.txt (line 2))
+  Downloading pytest-8.2.0-py3-none-any.whl.metadata (7.5 kB)
+Installing collected packages: urllib3, idna, charset-normalizer, certifi, requests, pluggy, packaging, iniconfig, pytest
+Successfully installed certifi-2024.2.2 charset-normalizer-3.3.2 idna-3.7 iniconfig-2.0.0 packaging-24.0 pluggy-1.5.0 pytest-8.2.0 requests-2.31.0 urllib3-2.2.1
+[0;33mWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv[0;m
+[32;1m$ ruff check .[0;m
+All checks passed!
+[32;1m$ mypy src[0;m
+Success: no issues found in 14 source files
+[32;1m$ python -m billing.selfcheck --fail-on-error[0;m
+selfcheck: ledger schema ok
+selfcheck: errors: 0, warnings: 2
+selfcheck: 0 errors found, error budget remaining 97%
+[32;1m$ pytest -v[0;m
+============================= test session starts ==============================
+platform linux -- Python 3.11.9, pytest-8.2.0, pluggy-1.5.0 -- /usr/local/bin/python
+cachedir: .pytest_cache
+rootdir: /builds/acme/billing
+collecting ... collected 6 items
+
+tests/test_client.py::test_retries_after_connection_reset_by_peer [32;1mPASSED[0;m [ 16%]
+tests/test_client.py::test_raises_timeout_error_after_three_attempts [32;1mPASSED[0;m [ 33%]
+tests/test_client.py::test_maps_503_service_unavailable_to_retryable [32;1mPASSED[0;m [ 50%]
+tests/test_invoice.py::test_invoice_total_rounds_half_up [32;1mPASSED[0;m [ 66%]
+tests/test_invoice.py::test_rejects_negative_quantity_with_value_error [32;1mPASSED[0;m [ 83%]
+tests/test_storage.py::test_reports_no_space_left_on_device [32;1mPASSED[0;m [100%]
+
+[32;1m============================== 6 passed in 0.31s ===============================[0;m
+section_end:1714560024:step_script[0K
+section_start:1714560024:cleanup_file_variables[0K[0K[36;1mCleaning up project directory and file based variables[0;m[0;m
+section_end:1714560025:cleanup_file_variables[0K[32;1mJob succeeded[0;m

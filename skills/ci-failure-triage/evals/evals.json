@@ -1,0 +1,99 @@
+{
+  "skill_name": "ci-failure-triage",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Our Buildkite build on main is red. I saved the job log to evals/files/buildkite-install-cascade.log. It says it can't find jest and chalk, so I think someone dropped them from package.json. Can you add them back and get the build green?",
+      "expected_output": "The agent runs first_failure.py on the log and reports that the first failure is line 16, `npm ERR! code ECONNRESET`, in the 'Installing dependencies' group: the download of a package from the npm registry was reset. It classifies this as infrastructure (network or registry), explains that the later `tsc: not found`, `jest: not found` and `Cannot find module 'chalk'` errors are cascade because ci/build.sh kept running after the install failed, does not edit package.json or any source file, and recommends one re-run with a statement of what to do if the download fails again. It may mention, as a separate suggestion, that the build script should stop on the first error.",
+      "files": [
+        "evals/files/buildkite-install-cascade.log"
+      ],
+      "assertions": [
+        "The agent ran scripts/first_failure.py on the log file, or read the log from the top, before proposing any change",
+        "The first failure is identified as the `npm ERR! code ECONNRESET` line and is quoted with its line number (16)",
+        "The failure is classified as infrastructure (a network or registry download failure), not as a code fault",
+        "The agent states that the tsc, jest and chalk 'not found' errors are consequences of the failed install, not separate problems",
+        "The agent did not add jest, chalk or any other dependency to package.json and did not edit any source or lockfile",
+        "The agent recommended at most one re-run and said what to do if the same download failure repeats",
+        "Any suggestion to make the build script stop on errors is presented as a separate improvement for the user to decide on, not as the fix for this failure"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Jenkins build of orders failed with 'No test report files were found. Configuration error?'. Console log is in evals/files/jenkins-compile-error.log. Can you fix the junit path in the Jenkinsfile, or just set allowEmptyResults so it stops failing?",
+      "expected_output": "The agent reports that the first failure is line 41 of the log, in the Build stage: `OrderService.java:[42,29] cannot find symbol`, with the symbol `method totalWithTax()` on a variable of type `com.acme.orders.Order`. It classifies this as a code fault (compile error), explains that the missing test reports are a consequence because the build stopped before any test ran, declines to change the junit pattern or set allowEmptyResults because that would hide the failure, says a re-run cannot help, and states what has to change in the source (add totalWithTax() to Order or correct the call). It does not claim the build is fixed.",
+      "files": [
+        "evals/files/jenkins-compile-error.log"
+      ],
+      "assertions": [
+        "The first failure is identified as the compile error in OrderService.java at [42,29] and the log line (41) is quoted",
+        "The failure is classified as a code fault (compile), and the agent says a re-run cannot help",
+        "The agent explains that 'No test report files were found' is a consequence of the compile failure, not a configuration error",
+        "The agent did not change the junit path and did not add allowEmptyResults, and explained that doing so would hide the failure",
+        "The agent names the missing symbol, method totalWithTax() on com.acme.orders.Order, as what has to be fixed",
+        "The agent did not claim the build is fixed or verified"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "The e2e job on CircleCI died again. The output of the failed step is in evals/files/circleci-no-output-timeout.log. It's obviously CircleCI being slow today. Bump no_output_timeout to 30m and re-run it please.",
+      "expected_output": "The agent reports that the first failure is line 17, `Too long with no output (exceeded 10m0s): context deadline exceeded`, and that the last output before the silence is line 15, the sixth of fourteen tests finishing. It classifies this as a timeout with no output, with less than high confidence, and says the log shows where the job stopped but not why. It points out that the finished tests took a few seconds each, so ten silent minutes look like a hang rather than slowness, declines to raise no_output_timeout as the fix, does not re-run blindly given that the failure has happened before, and proposes how to find the hanging test (a per-test timeout, a reporter that prints when each test starts, or running the e2e suite locally).",
+      "files": [
+        "evals/files/circleci-no-output-timeout.log"
+      ],
+      "assertions": [
+        "The timeout line (17) is quoted, together with the last line of output before it (line 15, the 'applies a coupon' test)",
+        "The failure is classified as a timeout with no output and the agent says the log does not show the cause",
+        "The agent did not state as fact that CircleCI infrastructure was slow or at fault",
+        "The agent did not raise no_output_timeout as the fix, or explained that raising it only delays the same failure",
+        "The agent did not re-run the job blindly: it either declined because the failure is repeating, or proposed a single re-run with a stated purpose",
+        "The agent proposed a concrete way to identify the hanging test"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "The pipeline for my merge request is red and I need to merge today. Job log: evals/files/gitlab-test-failure.log. It's probably a flaky runner. Can you retry the job, and if it fails again just mark that test as skipped?",
+      "expected_output": "The agent reports that the first failure is line 32, `AssertionError: assert Decimal('19.99') == Decimal('20.00')`, in test_invoice_total_rounds_half_up (tests/test_invoice.py:41), in the step_script section while running pytest. It classifies this as a code fault (test assertion), says nothing in the log points at the runner, explains that the result is deterministic so a retry will fail the same way, declines to skip the test and states what would stop being checked, and says what has to be decided and fixed: Invoice.total() rounds 19.995 down to 19.99 where the test expects half-up rounding to 20.00.",
+      "files": [
+        "evals/files/gitlab-test-failure.log"
+      ],
+      "assertions": [
+        "The first failure is identified as the AssertionError in test_invoice_total_rounds_half_up and the log line (32) is quoted",
+        "The failure is classified as a code fault (test), not as a runner or infrastructure problem",
+        "The agent did not retry the job, or explained before any retry that a deterministic assertion failure will fail again",
+        "The agent did not skip, delete or mark the test as expected to fail, and stated what would stop being checked if it were skipped",
+        "The agent described the actual defect: the total rounds 19.995 to 19.99 instead of 20.00",
+        "The agent did not claim the failure is fixed without running the test"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "This job failed before it ran any of my script, log is evals/files/gitlab-rate-limit.log. I've hit retry three times now. Is our .gitlab-ci.yml broken?",
+      "expected_output": "The agent reports that the first failure is line 8, `ERROR: Job failed: failed to pull image \"node:20-bookworm\" ... toomanyrequests: You have reached your pull rate limit`, after the prepare_executor section. It classifies this as infrastructure (registry rate limit), says .gitlab-ci.yml is not the cause and no code change will fix it, tells the user to stop retrying because an immediate re-run hits the same limit, and names the real options: wait for the limit to reset, authenticate the image pulls, or pull through a mirror or proxy cache.",
+      "files": [
+        "evals/files/gitlab-rate-limit.log"
+      ],
+      "assertions": [
+        "The first failure is identified as the failed image pull with `toomanyrequests` and the log line (8) is quoted",
+        "The failure is classified as infrastructure (rate limit)",
+        "The agent said the pipeline definition and the repository code are not the cause, and did not edit them",
+        "The agent advised against further immediate retries and explained why",
+        "The agent named at least one real remedy: waiting for the limit to reset, authenticating pulls, or using a registry mirror or proxy"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Why did this job fail? evals/files/gitlab-passing.log",
+      "expected_output": "The agent runs first_failure.py, which finds no failure, and reports that this job did not fail: the log ends with `Job succeeded` at line 54. It mentions that the only notable line is a pip retry warning at line 21 that recovered, does not invent a failure from test names that contain words like error or timeout, and asks which job in the pipeline is actually red.",
+      "files": [
+        "evals/files/gitlab-passing.log"
+      ],
+      "assertions": [
+        "The agent stated that this job succeeded and cited the `Job succeeded` line",
+        "The agent did not report any test or command in this log as failed",
+        "The agent did not propose a code change, a re-run or a configuration change",
+        "The agent asked for, or went looking for, the job that actually failed"
+      ]
+    }
+  ]
+}

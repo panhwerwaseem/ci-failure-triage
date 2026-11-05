@@ -1,0 +1,30 @@
+#!/bin/bash -eo pipefail
+npm test
+
+> storefront@2.8.1 test
+> jest --ci
+
+PASS src/errors/ApiError.test.ts
+  ApiError
+    ✓ maps a 503 Service Unavailable response to RetryableError (4 ms)
+    ✓ keeps the original stack when wrapping a TypeError (1 ms)
+PASS src/net/retry.test.ts
+  retry
+    ✓ retries after ECONNRESET (12 ms)
+    ✓ gives up after 3 attempts and rethrows the last error (31 ms)
+    ✓ does not retry a 401 Unauthorized response (2 ms)
+PASS src/cart/total.test.ts
+  cart total
+    ✓ rounds half up (2 ms)
+    ✓ rejects a negative quantity (1 ms)
+  console.warn
+    Coupon SPRING24 is expired; falling back to no discount
+
+      at applyCoupon (src/cart/coupon.ts:18:13)
+
+
+Test Suites: 3 passed, 3 total
+Tests:       7 passed, 7 total
+Snapshots:   0 total
+Time:        3.412 s
+Ran all test suites.

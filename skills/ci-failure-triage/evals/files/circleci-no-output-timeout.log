@@ -1,0 +1,17 @@
+#!/bin/bash -eo pipefail
+npm run test:e2e
+
+> storefront@2.8.1 test:e2e
+> playwright test --reporter=list
+
+
+Running 14 tests using 2 workers
+
+  ✓  1 [chromium] › tests/cart.spec.ts:8:5 › cart › adds an item (1.9s)
+  ✓  2 [chromium] › tests/cart.spec.ts:21:5 › cart › removes an item (1.4s)
+  ✓  3 [chromium] › tests/cart.spec.ts:34:5 › cart › shows an error banner when the API returns 503 Service Unavailable (2.6s)
+  ✓  4 [chromium] › tests/search.spec.ts:9:5 › search › finds a product by name (1.1s)
+  ✓  5 [chromium] › tests/checkout.spec.ts:14:5 › checkout › requires an address (1.7s)
+  ✓  6 [chromium] › tests/checkout.spec.ts:27:5 › checkout › applies a coupon (2.2s)
+
+Too long with no output (exceeded 10m0s): context deadline exceeded

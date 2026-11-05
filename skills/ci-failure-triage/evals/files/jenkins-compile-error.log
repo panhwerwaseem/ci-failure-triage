@@ -1,0 +1,89 @@
+Started by user Dana Reyes
+Obtained Jenkinsfile from git https://git.example.com/acme/orders.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on agent-linux-04 in /var/jenkins/workspace/orders_main
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+[2024-05-01T10:40:02.274Z] Selected Git installation does not exist. Using Default
+[2024-05-01T10:40:02.274Z] The recommended git tool is: NONE
+[2024-05-01T10:40:02.274Z] No credentials specified
+[2024-05-01T10:40:03.411Z] Fetching changes from the remote Git repository
+[2024-05-01T10:40:05.685Z] Checking out Revision 9d4c2e7a1b3f5d6e8a0c2b4d6f8a1c3e5b7d9f0a (refs/remotes/origin/main)
+[2024-05-01T10:40:05.685Z] Commit message: "Apply tax to order totals"
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Build)
+[Pipeline] sh
+[2024-05-01T10:40:06.822Z] + mvn -B -ntp clean verify
+[2024-05-01T10:40:08.096Z] [INFO] Scanning for projects...
+[2024-05-01T10:40:08.096Z] [INFO] 
+[2024-05-01T10:40:08.096Z] [INFO] -------------------------< com.acme:orders >--------------------------
+[2024-05-01T10:40:08.096Z] [INFO] Building orders 3.14.0-SNAPSHOT
+[2024-05-01T10:40:08.096Z] [INFO] --------------------------------[ jar ]---------------------------------
+[2024-05-01T10:40:09.233Z] [INFO] 
+[2024-05-01T10:40:09.233Z] [INFO] --- maven-clean-plugin:3.2.0:clean (default-clean) @ orders ---
+[2024-05-01T10:40:09.233Z] [INFO] 
+[2024-05-01T10:40:09.233Z] [INFO] --- maven-resources-plugin:3.3.1:resources (default-resources) @ orders ---
+[2024-05-01T10:40:09.233Z] [INFO] Copying 3 resources from src/main/resources to target/classes
+[2024-05-01T10:40:10.370Z] [INFO] 
+[2024-05-01T10:40:10.370Z] [INFO] --- maven-compiler-plugin:3.11.0:compile (default-compile) @ orders ---
+[2024-05-01T10:40:10.370Z] [INFO] Changes detected - recompiling the module! :source
+[2024-05-01T10:40:10.370Z] [INFO] Compiling 42 source files with javac [debug target 17] to target/classes
+[2024-05-01T10:40:13.781Z] [INFO] -------------------------------------------------------------
+[2024-05-01T10:40:13.781Z] [ERROR] COMPILATION ERROR : 
+[2024-05-01T10:40:13.781Z] [INFO] -------------------------------------------------------------
+[2024-05-01T10:40:13.781Z] [ERROR] /var/jenkins/workspace/orders_main/src/main/java/com/acme/orders/OrderService.java:[42,29] cannot find symbol
+[2024-05-01T10:40:13.781Z]   symbol:   method totalWithTax()
+[2024-05-01T10:40:13.781Z]   location: variable order of type com.acme.orders.Order
+[2024-05-01T10:40:13.781Z] [INFO] 1 error
+[2024-05-01T10:40:13.781Z] [INFO] -------------------------------------------------------------
+[2024-05-01T10:40:13.781Z] [INFO] ------------------------------------------------------------------------
+[2024-05-01T10:40:13.781Z] [INFO] BUILD FAILURE
+[2024-05-01T10:40:13.781Z] [INFO] ------------------------------------------------------------------------
+[2024-05-01T10:40:13.781Z] [INFO] Total time:  5.412 s
+[2024-05-01T10:40:13.781Z] [INFO] Finished at: 2024-05-01T10:40:13Z
+[2024-05-01T10:40:13.781Z] [INFO] ------------------------------------------------------------------------
+[2024-05-01T10:40:13.781Z] [ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.11.0:compile (default-compile) on project orders: Compilation failure
+[2024-05-01T10:40:13.781Z] [ERROR] /var/jenkins/workspace/orders_main/src/main/java/com/acme/orders/OrderService.java:[42,29] cannot find symbol
+[2024-05-01T10:40:13.781Z] [ERROR]   symbol:   method totalWithTax()
+[2024-05-01T10:40:13.781Z] [ERROR]   location: variable order of type com.acme.orders.Order
+[2024-05-01T10:40:13.781Z] [ERROR] -> [Help 1]
+[2024-05-01T10:40:13.781Z] [ERROR] 
+[2024-05-01T10:40:13.781Z] [ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[2024-05-01T10:40:13.781Z] [ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[2024-05-01T10:40:13.781Z] [ERROR] 
+[2024-05-01T10:40:13.781Z] [ERROR] For more information about the errors and possible solutions, please read the following articles:
+[2024-05-01T10:40:13.781Z] [ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Integration tests)
+Stage "Integration tests" skipped due to earlier failure(s)
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] junit
+[2024-05-01T10:40:14.918Z] Recording test results
+Error when executing always post condition:
+Also:   org.jenkinsci.plugins.workflow.actions.ErrorAction$ErrorId: 6b1d3c52-8f0e-4a7b-9c2d-5e1f7a3b9d04
+hudson.AbortException: No test report files were found. Configuration error?
+	at hudson.tasks.junit.JUnitResultArchiver.parse(JUnitResultArchiver.java:253)
+	at hudson.tasks.junit.pipeline.JUnitResultsStepExecution.run(JUnitResultsStepExecution.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+ERROR: script returned exit code 1
+Finished: FAILURE
